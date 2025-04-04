@@ -11,7 +11,7 @@ def get_dataset(dataset_path, seed=None):
 
     frame_paths = []
     video_folders = os.listdir(dataset_path)  # Get list of videos (e.g., "01_001", "01_002", ...)
-    
+    print("ana abl loop get dataset")
     for video_folder in video_folders:
         frame_dir = os.path.join(dataset_path, video_folder, "frames")
         if os.path.exists(frame_dir):
@@ -22,7 +22,7 @@ def get_dataset(dataset_path, seed=None):
         transforms.Resize((64, 64)),  # Resize all images to (64, 64)
         transforms.ToTensor()  # Convert images to tensors
     ])
-
+     print("ana abl tany loop get dataset")
     images = []
     for frame_path in frame_paths:
         img = Image.open(frame_path).convert("RGB")  # Load image
@@ -42,5 +42,3 @@ def create_meshgrid_from_data(data, n_points=100, meshgrid_offset=1):
     return xx, yy
 
 # Example usage
-dataset_path = "/kaggle/input/shanghaitech-anomaly-detection/dataset/mp"
-images = get_dataset(dataset_path)
