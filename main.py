@@ -47,7 +47,7 @@ print("ana abl eltrain")
 def train_and_evaluate(args):
     # zeros are normal, ones are anomalous
     print("ana fe awel line fel train")
-    data_train, labels_train, data_test, labels_test, id_to_type = get_dataset()
+    data_train, labels_train, data_test, labels_test, id_to_type = get_dataset("/kaggle/input/shanghaitech-anomaly-detection/dataset/mp")
     print("3adeet get dataset")
     data_train = torch.Tensor(data_train)
     data_test = torch.Tensor(data_test)
