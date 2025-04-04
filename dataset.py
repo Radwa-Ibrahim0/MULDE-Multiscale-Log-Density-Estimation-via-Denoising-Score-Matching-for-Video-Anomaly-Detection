@@ -11,34 +11,39 @@ def get_dataset(dataset_path, seed=None):
         np.random.seed(seed)
 
     frame_paths = []
-    video_folders = os.listdir(dataset_path)  # Get list of videos (e.g., "01_001", "01_002", ...)
-    print("video folders: ")
-    print(video_folders)
-    print("ana abl loop get dataset")
-    print(dataset_path)
+    video_folders = os.listdir(dataset_path)
     for video_folder in video_folders:
         frame_dir = os.path.join(dataset_path, video_folder, "frames")
-        print(frame_dir)
         if os.path.exists(frame_dir):
-            frames = sorted(os.listdir(frame_dir))  # Sort to maintain sequence order
+            frames = sorted(os.listdir(frame_dir))
             frame_paths.extend([os.path.join(frame_dir, frame) for frame in frames])
 
     transform = transforms.Compose([
-        transforms.Resize((64, 64)),  # Resize all images to (64, 64)
-        transforms.ToTensor()  # Convert images to tensors
+        transforms.Resize((64, 64)),
+        transforms.ToTensor()
     ])
-    print("ana abl tany loop get dataset")
+
     images = []
     for frame_path in tqdm(frame_paths, desc="Processing frames"):
-        img = Image.open(frame_path).convert("RGB")  # Load image
-        img = transform(img)  # Apply transformations
+        img = Image.open(frame_path).convert("RGB")
+        img = transform(img)
         images.append(img)
 
-    images = torch.stack(images)  # Convert list of tensors to a single tensor batch
+    images = torch.stack(images)
 
-    print(f"Loaded {len(images)} frames from {len(video_folders)} videos.")
-    
-    return images  # Return the dataset as a tensor batch
+    # Dummy labels & basic splitting (e.g., 80% train, 20% test)
+    split_idx = int(0.8 * len(images))
+    data_train = images[:split_idx]
+    labels_train = np.zeros(len(data_train)).astype(np.uint8)  # Dummy labels for training
+
+    data_test = images[split_idx:]
+    labels_test = np.random.randint(0, 2, size=len(data_test)).astype(np.uint8)  # Simulated labels
+
+    id_to_type = {0: "normal", 1: "anomaly"}
+
+    print(f"Loaded {len(images)} frames total: {len(data_train)} train, {len(data_test)} test.")
+
+    return data_train, labels_train, data_test, labels_test, id_to_type
 
 def create_meshgrid_from_data(data, n_points=100, meshgrid_offset=1):
     x_min, x_max = data[:, 0].min() - meshgrid_offset, data[:, 0].max() + meshgrid_offset
