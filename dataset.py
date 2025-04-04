@@ -35,6 +35,12 @@ def get_dataset(dataset_path, seed=None):
     
     return images  # Return the dataset as a tensor batch
 
+def create_meshgrid_from_data(data, n_points=100, meshgrid_offset=1):
+    x_min, x_max = data[:, 0].min() - meshgrid_offset, data[:, 0].max() + meshgrid_offset
+    y_min, y_max = data[:, 1].min() - meshgrid_offset, data[:, 1].max() + meshgrid_offset
+    xx, yy = np.meshgrid(np.linspace(x_min, x_max, n_points), np.linspace(y_min, y_max, n_points))
+    return xx, yy
+
 # Example usage
 dataset_path = "/kaggle/input/shanghaitech-anomaly-detection/dataset/mp"
 images = get_dataset(dataset_path)
