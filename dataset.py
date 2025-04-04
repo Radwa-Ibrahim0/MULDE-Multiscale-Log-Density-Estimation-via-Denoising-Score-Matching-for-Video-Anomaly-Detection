@@ -3,6 +3,7 @@ import torch
 import numpy as np
 from torchvision import transforms
 from PIL import Image
+from tqdm import tqdm
 
 def get_dataset(dataset_path, seed=None):
     if seed is not None:
@@ -24,7 +25,7 @@ def get_dataset(dataset_path, seed=None):
     ])
     print("ana abl tany loop get dataset")
     images = []
-    for frame_path in frame_paths:
+    for frame_path in tqdm(frame_paths, desc="Processing frames"):
         img = Image.open(frame_path).convert("RGB")  # Load image
         img = transform(img)  # Apply transformations
         images.append(img)
