@@ -18,6 +18,7 @@ def get_dataset(dataset_path, seed=None):
     for video_folder in video_folders:
         frame_dir = os.path.join(dataset_path, video_folder, "frames")
         if os.path.exists(frame_dir):
+            print("if tl3t true")
             frames = sorted(os.listdir(frame_dir))  # Sort to maintain sequence order
             frame_paths.extend([os.path.join(frame_dir, frame) for frame in frames])
 
