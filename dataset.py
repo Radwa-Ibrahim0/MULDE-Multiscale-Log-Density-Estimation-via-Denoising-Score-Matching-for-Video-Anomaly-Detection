@@ -22,7 +22,7 @@ def get_dataset(dataset_path, seed=None):
         transforms.Resize((64, 64)),  # Resize all images to (64, 64)
         transforms.ToTensor()  # Convert images to tensors
     ])
-     print("ana abl tany loop get dataset")
+    print("ana abl tany loop get dataset")
     images = []
     for frame_path in frame_paths:
         img = Image.open(frame_path).convert("RGB")  # Load image
