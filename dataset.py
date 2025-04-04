@@ -12,6 +12,8 @@ def get_dataset(dataset_path, seed=None):
 
     frame_paths = []
     video_folders = os.listdir(dataset_path)  # Get list of videos (e.g., "01_001", "01_002", ...)
+    print("video folders: ")
+    print(video_folders)
     print("ana abl loop get dataset")
     for video_folder in video_folders:
         frame_dir = os.path.join(dataset_path, video_folder, "frames")
