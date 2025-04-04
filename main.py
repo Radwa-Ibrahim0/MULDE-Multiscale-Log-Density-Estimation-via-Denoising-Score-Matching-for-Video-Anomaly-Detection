@@ -16,7 +16,7 @@ tensorboard --logdir=runs/MULDE --samples_per_plugin images=100
 An aggregate is either based on the AUC-ROC of the GMMs or a max/median/mean of the standardized scores over all sigma 1:L
 The individual sigma evaluation is based on the AUC-ROC of the scores for each sigma 1:L
 """
-
+print("ana abl elprints")
 import numpy as np
 import argparse
 import utils
@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 from dataset import get_dataset, create_meshgrid_from_data
 torch.cuda.empty_cache()
 import plotting_utils
-
+print("ana b3d elprints")
 figsize = (7, 7)
 edgecolors = None
 linewidths = 1.
@@ -43,11 +43,12 @@ marker = "x"
 # cmap_mesh = LinearSegmentedColormap.from_list('CustomRedWhiteGreen', list(zip(positions, colors)))
 cmap_mesh = "viridis"  # "coolwarm"
 
-
+print("ana abl eltrain")
 def train_and_evaluate(args):
     # zeros are normal, ones are anomalous
+    print("ana fe awel line fel train")
     data_train, labels_train, data_test, labels_test, id_to_type = get_dataset()
-
+    print("3adeet get dataset")
     data_train = torch.Tensor(data_train)
     data_test = torch.Tensor(data_test)
 
@@ -116,7 +117,7 @@ def train_and_evaluate(args):
         summary_writer.add_figure(f"dataset", plt.gcf(), 0)
         plt.close()
 
-
+    print("ana abl elfor loop")
     for epoch in range(args.epochs + 1):
         ################################################################################################################
         # train
