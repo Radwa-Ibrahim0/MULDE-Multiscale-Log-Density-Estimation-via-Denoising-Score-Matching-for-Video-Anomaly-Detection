@@ -10,38 +10,46 @@ def get_dataset(dataset_path, seed=None):
         torch.manual_seed(seed)
         np.random.seed(seed)
 
-    frame_paths = []
-    video_folders = os.listdir(dataset_path)
-    for video_folder in video_folders:
-        frame_dir = os.path.join(dataset_path, video_folder, "frames")
-        if os.path.exists(frame_dir):
-            frames = sorted(os.listdir(frame_dir))
-            frame_paths.extend([os.path.join(frame_dir, frame) for frame in frames])
+    def load_frames_from_folder(folder_path):
+        frame_paths = []
+        video_folders = sorted(os.listdir(folder_path))
+        for video_folder in video_folders:
+            video_path = os.path.join(folder_path, video_folder)
+            if os.path.isdir(video_path):
+                frames = sorted(os.listdir(video_path))
+                frame_paths.extend([os.path.join(video_path, frame) for frame in frames])
+        return frame_paths
+
+    # Load training and testing frames separately
+    train_frame_paths = load_frames_from_folder(os.path.join(dataset_path, 'training', 'frames'))
+    test_frame_paths = load_frames_from_folder(os.path.join(dataset_path, 'testing', 'frames'))
 
     transform = transforms.Compose([
         transforms.Resize((64, 64)),
         transforms.ToTensor()
     ])
 
-    images = []
-    for frame_path in tqdm(frame_paths, desc="Processing frames"):
-        img = Image.open(frame_path).convert("RGB")
+    # Load training images
+    train_images = []
+    for path in tqdm(train_frame_paths, desc="Processing training frames"):
+        img = Image.open(path).convert("RGB")
         img = transform(img)
-        images.append(img)
-
-    images = torch.stack(images)
-
-    # Dummy labels & basic splitting (e.g., 80% train, 20% test)
-    split_idx = int(0.8 * len(images))
-    data_train = images[:split_idx]
+        train_images.append(img)
+    data_train = torch.stack(train_images)
     labels_train = np.zeros(len(data_train)).astype(np.uint8)  # Dummy labels for training
 
-    data_test = images[split_idx:]
+    # Load testing images
+    test_images = []
+    for path in tqdm(test_frame_paths, desc="Processing testing frames"):
+        img = Image.open(path).convert("RGB")
+        img = transform(img)
+        test_images.append(img)
+    data_test = torch.stack(test_images)
     labels_test = np.random.randint(0, 2, size=len(data_test)).astype(np.uint8)  # Simulated labels
 
     id_to_type = {0: "normal", 1: "anomaly"}
 
-    print(f"Loaded {len(images)} frames total: {len(data_train)} train, {len(data_test)} test.")
+    print(f"Loaded {len(data_train)} training frames, {len(data_test)} testing frames.")
 
     return data_train, labels_train, data_test, labels_test, id_to_type
 
@@ -51,4 +59,6 @@ def create_meshgrid_from_data(data, n_points=100, meshgrid_offset=1):
     xx, yy = np.meshgrid(np.linspace(x_min, x_max, n_points), np.linspace(y_min, y_max, n_points))
     return xx, yy
 
-# Example usage
+# Example usage:
+# dataset_path = "path/to/ped2-ds"
+# get_dataset(dataset_path)
