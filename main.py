@@ -134,6 +134,8 @@ def train_and_evaluate(args):
                 print(f"x shape: {x.shape}")
                 print(f"data_train_mean shape: {data_train_mean.shape}")
                 print(f"data_train_std shape: {data_train_std.shape}")
+                data_train_mean = data_train_mean.view(-1)  # Flatten to shape [12288]
+                data_train_std = data_train_std.view(-1)  # Flatten to shape [12288]
                 x = (x - data_train_mean) / (data_train_std + 1e-8)
 
                 ###########
