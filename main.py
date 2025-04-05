@@ -133,7 +133,7 @@ def train_and_evaluate(args):
                 x = x.reshape(x.shape[0], -1)
                 print(f"x shape: {x.shape}")
                 print(f"data_train_mean shape: {data_train_mean.shape}")
-                print(f"data_train_std shape: {data_train_std.shape}")s
+                print(f"data_train_std shape: {data_train_std.shape}")
                 x = (x - data_train_mean) / (data_train_std + 1e-8)
 
                 ###########
