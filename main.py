@@ -130,7 +130,11 @@ def train_and_evaluate(args):
 
             for batch_idx, data in enumerate(tepoch):
                 x = data[0].to(args.device)
+                print(x)
                 x = x.reshape(x.shape[0], -1)
+                print(x)
+                print(data_train_mean)
+                print(data_train_std)
                 x = (x - data_train_mean) / (data_train_std + 1e-8)
 
                 ###########
